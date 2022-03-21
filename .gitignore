@@ -1,0 +1,17 @@
+### JupyterNotebooks template
+# gitignore template for Jupyter Notebooks
+# website: http://jupyter.org/
+
+*.ipynb*
+wordle_solver.py
+word_weights.py
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Remove previous ipynb_checkpoints
+#   git rm -r .ipynb_checkpoints/
+
+# PyCharm
+.idea
