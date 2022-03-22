@@ -2,7 +2,7 @@ import json
 import streamlit as st
 import sys
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 st.set_page_config(
     page_title="Wordle Solver",
@@ -20,21 +20,22 @@ with open("sidebar.html", "r", encoding="UTF-8") as sidebar_file:
     sidebar_html = sidebar_file.read().replace("{VERSION}", VERSION)
 
 with st.sidebar:
-    st.components.v1.html(sidebar_html, height=400)
+    st.header("Instructions")
+    st.info(
+        "1. Visit any wordle app/site (for example, the [original](https://www.nytimes.com/games/wordle/index.html))\n"
+        "2. Enter the length of the word\n"
+        "3. Enter the word suggested by the solver in the wordle app\n"
+        "4. Enter the result of the attempt as a sequence of colors: b (black), y (yellow), or g (green)\n"
+        "5. Repeat steps 3 and 4 till you find a solution"
+    )
+    st.image(
+        "example.png",
+        caption="For example, enter 'ybgyy' if the result looks like this",
+    )
+    st.components.v1.html(sidebar_html, height=450)
 
 # ---------- HEADER ----------
 st.title("Welcome to Wordle Solver!")
-st.header("Instructions")
-st.info(
-    "1. Visit any traditional wordle app/site (for example, the [original](https://www.nytimes.com/games/wordle/index.html))\n"
-    "2. Enter the length of the word\n"
-    "3. Enter the word suggested by the solver in the wordle app\n"
-    "4. Enter the result of the attempt as a sequence of colors: b (black), y (yellow), or g (green)\n"
-    "5. Repeat steps 3 and 4 till you find a solution"
-)
-st.image(
-    "example.png", caption="For example, enter 'ybgyy' if the result looks like this"
-)
 
 # ---------- RUN ----------
 st.header("Start")
