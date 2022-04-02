@@ -2,7 +2,7 @@ import json
 import streamlit as st
 import sys
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 st.set_page_config(
     page_title="Wordle Solver",
@@ -38,7 +38,6 @@ with st.sidebar:
 st.title("Welcome to Wordle Solver!")
 
 # ---------- RUN ----------
-st.header("Start")
 with open("word_weights.json", "r") as f:
     word_weights = json.load(f)
 
@@ -52,11 +51,14 @@ i = 1
 try:
     while filtered_words:
 
-        st.subheader(f"Attempt: {i}")
         word = sorted(filtered_words.items(), key=lambda item: item[1], reverse=True)[
             0
         ][0]
-        st.subheader(f"Enter: {word.upper()}")
+
+        lcol, rcol = st.columns(2)
+        lcol.subheader(f"Attempt: {i}")
+        rcol.subheader(f"Enter: {word.upper()}")
+
         result = st.text_input(
             "Enter result colors",
             placeholder="b" * length,
@@ -65,6 +67,7 @@ try:
             help="Enter the result for each letter in the format: Black: b | Yellow: y | Green: g",
         ).lower()
 
+        # Result validation
         if len(result) != length:
             st.warning(
                 f"Result string must be {length} letters long. Please correct results"
@@ -77,6 +80,7 @@ try:
             )
             sys.exit()
 
+        # Solved
         if result == "g" * length:
             st.success(f"Solved in {i} attempts!")
             st.balloons()
@@ -131,18 +135,13 @@ try:
             for w in filtered_words:
                 if any(letter for letter in include.values() if letter not in w):
                     del tmp_dict[w]
-
-        filtered_words = tmp_dict.copy()
-
-        # Removing words which contain included letters in excluded positions
-        tmp_dict = filtered_words.copy()
-
-        if include:
-            for w in filtered_words:
-                for idx, l in include.items():
-                    if w[idx] == l:
-                        del tmp_dict[w]
-                        break
+                    break
+                else:
+                    # Removing words which contain included letters in excluded positions
+                    for idx, l in include.items():
+                        if w[idx] == l:
+                            del tmp_dict[w]
+                            break
 
         filtered_words = tmp_dict.copy()
 
