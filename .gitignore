@@ -2,6 +2,9 @@
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/
 
+# macOS
+*.DS_Store
+
 *.ipynb*
 wordle_solver.py
 word_weights.py

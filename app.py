@@ -1,8 +1,9 @@
 import json
-import streamlit as st
 import sys
 
-VERSION = "0.2.1"
+import streamlit as st
+
+VERSION = "0.2.2"
 
 st.set_page_config(
     page_title="Wordle Solver",
@@ -135,7 +136,6 @@ try:
             for w in filtered_words:
                 if any(letter for letter in include.values() if letter not in w):
                     del tmp_dict[w]
-                    break
                 else:
                     # Removing words which contain included letters in excluded positions
                     for idx, l in include.items():
