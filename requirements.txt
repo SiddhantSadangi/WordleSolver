@@ -104,7 +104,7 @@ six==1.16.0
 smmap==5.0.0
 sniffio==1.2.0
 stack-data==0.2.0
-streamlit==1.7.0
+streamlit==1.8.1
 terminado==0.13.1
 testpath==0.6.0
 toml==0.10.2

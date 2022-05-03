@@ -1,13 +1,14 @@
 import json
+import string
 import sys
 
 import streamlit as st
 
-VERSION = "0.2.2"
+VERSION = "0.3.0"
 
 st.set_page_config(
     page_title="Wordle Solver",
-    page_icon="example.png",
+    page_icon="favicon.png",
     menu_items={
         "About": f"Wordle Solver v{VERSION}  "
         f"\nApp contact: [Siddhant Sadangi](mailto:siddhant.sadangi@gmail.com)",
@@ -38,20 +39,43 @@ with st.sidebar:
 # ---------- HEADER ----------
 st.title("Welcome to Wordle Solver!")
 
-# ---------- RUN ----------
-with open("word_weights.json", "r") as f:
-    word_weights = json.load(f)
+# ---------- CALCULATE WORD WEIGHTS ----------
+with open("words.txt", "r") as f:
+    words = json.load(f)
 
 length = st.number_input(
-    "Enter word length", min_value=2, max_value=max(map(len, word_weights))
+    "Enter word length", min_value=2, max_value=max(map(len, words)), value=5
 )
-filtered_words = {k: word_weights[k] for k in word_weights if len(k) == length}
+
+filtered_words = [word for word in words if len(word) == length]
+
+# Getting number of times each letter occurs in the corpus
+alpha_weights = {k: 0 for k in string.ascii_lowercase}
+
+for alpha in string.ascii_lowercase:
+    for word in filtered_words:
+        alpha_weights[alpha] += word.count(alpha)
+
+# Getting weight of each word
+word_weights = {k: 0 for k in filtered_words}
+
+for word in word_weights:
+    for alpha in word:
+        word_weights[word] += alpha_weights[alpha]
+
+# Multiplying weight by number of distinct letters in the word
+# (To penalise duplication of letters so that we can eliminate letters faster)
+for word in word_weights:
+    word_weights[word] *= len(set(word))
+
+filtered_words = word_weights.copy()
+
+# ---------- RUN THE LOOP ----------
 
 i = 1
 
 try:
     while filtered_words:
-
         word = sorted(filtered_words.items(), key=lambda item: item[1], reverse=True)[
             0
         ][0]
@@ -156,5 +180,6 @@ except TypeError:
     st.warning(
         "Waiting for input. Please refresh the page if you feel something is wrong."
     )
-except:
+
+except SystemExit:
     pass
