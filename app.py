@@ -4,7 +4,7 @@ import sys
 
 import streamlit as st
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 
 st.set_page_config(
     page_title="Wordle Solver",
